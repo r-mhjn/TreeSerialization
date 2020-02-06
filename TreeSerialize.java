@@ -28,6 +28,7 @@ class Node {
 
 class TreeSerialize {
 
+    // a function to insert node in a tree
     public static Node insertNode(Node root, char key) {
 
         if (root == null) {
@@ -43,6 +44,7 @@ class TreeSerialize {
         return root;
     }
 
+    // a funtion to print levelOrderTree traversal
     public static void printLevelOrder(Node root) {
         Queue<Node> queue = new LinkedList<Node>();
         queue.add(root);
@@ -85,8 +87,10 @@ class TreeSerialize {
         ArrayList<Character> list = new ArrayList<Character>();
 
         try {
+            // if uses choses to serialize the file
             if (option.equals("create")) {
 
+                // reading contents from csv file
                 br = new BufferedReader(new FileReader(csvFileInput));
                 while ((line = br.readLine()) != null) {
                     String ar[] = line.split(";");
@@ -94,31 +98,35 @@ class TreeSerialize {
                     lines.add(ar[0]);
                 }
 
+                // creating a string of file contents
                 String str = "";
                 for (int i = 0; i < lines.size(); i++) {
                     str += lines.get(i);
                 }
 
+                // creating a binary tree for file contents
                 root = null;
                 for (int i = 0; i < str.length(); i++) {
                     root = insertNode(root, str.charAt(i));
                 }
 
+                // serializing file contents
                 serialize(root, list);
-                OutputStream outputStream = new FileOutputStream(csvFileOutput);
 
-                // String a = list.toString();
+                // putting the serialized data to a file
+                OutputStream outputStream = new FileOutputStream(csvFileOutput);
                 String a = "";
                 for (int i = 0; i < list.size(); i++) {
                     a += list.get(i);
                 }
-
                 byte[] allBytes = new String(a).getBytes(StandardCharsets.UTF_8);
-
                 outputStream.write(allBytes);
 
+                // if user choses to deserialize the data
             } else if (option.equals("load")) {
                 try {
+
+                    // reading serialized data from the file
                     InputStream inputStream = new FileInputStream(csvFileOutput);
                     int byteRead;
                     list.clear();
@@ -126,9 +134,9 @@ class TreeSerialize {
 
                         list.add((char) byteRead);
                     }
-                    // System.out.println(list.toString());
-
+                    // deserializing the file
                     root = deSerialize(list);
+                    // level order file traversal
                     printLevelOrder(root);
                 } catch (IOException ex) {
                     ex.printStackTrace();
