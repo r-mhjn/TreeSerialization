@@ -1,7 +1,6 @@
 import java.util.List;
 import java.util.Queue;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -66,8 +65,16 @@ class TreeSerialize {
 
     public static void main(String[] args) {
         String option = args[0];
-        String csvFileInput = args[1];
-        String csvFileOutput = args[2];
+        String csvFileInput = "";
+        String csvFileOutput = "";
+        // String csvFileInput = args[1];
+        // String csvFileOutput = args[2];
+        if (args.length == 3) {
+            csvFileInput = args[1];
+            csvFileOutput = args[2];
+        } else if (args.length == 2) {
+            csvFileOutput = args[1];
+        }
 
         BufferedReader br = null;
         String line = "";
@@ -79,8 +86,6 @@ class TreeSerialize {
 
         try {
             if (option.equals("create")) {
-                // String csvFileInput = args[1];
-                // String csvFileOutput = args[2];
 
                 br = new BufferedReader(new FileReader(csvFileInput));
                 while ((line = br.readLine()) != null) {
@@ -93,7 +98,7 @@ class TreeSerialize {
                 for (int i = 0; i < lines.size(); i++) {
                     str += lines.get(i);
                 }
-                // System.out.println(str);
+
                 root = null;
                 for (int i = 0; i < str.length(); i++) {
                     root = insertNode(root, str.charAt(i));
@@ -111,17 +116,14 @@ class TreeSerialize {
                 byte[] allBytes = new String(a).getBytes(StandardCharsets.UTF_8);
 
                 outputStream.write(allBytes);
-                // System.out.println(list.toString());
 
             } else if (option.equals("load")) {
                 try {
-                    // String csvFileOutput = args[1];
                     InputStream inputStream = new FileInputStream(csvFileOutput);
-
                     int byteRead;
                     list.clear();
                     while ((byteRead = inputStream.read()) != -1) {
-                        // System.out.print((char) byteRead);
+
                         list.add((char) byteRead);
                     }
                     // System.out.println(list.toString());
@@ -131,8 +133,6 @@ class TreeSerialize {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-
-                // printLevelOrder(root);
             }
 
         } catch (FileNotFoundException e) {
@@ -147,7 +147,6 @@ class TreeSerialize {
                 e.printStackTrace();
             }
         }
-
     }
 
     public static void serialize(Node root, ArrayList<Character> list) {
